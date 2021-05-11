@@ -24,12 +24,12 @@ router.get(
     asyncHandler(async (req, res, next) => {
         // Shows the full list of books
         const books = await Book.findAll();
-        res.render('index', { books });
+        res.render('book/index', { books });
     })
 );
 
 router.get('/books/new', (req, res, next) => {
-    res.render('new-book');
+    res.render('book/new');
 });
 
 router.post(
@@ -42,7 +42,7 @@ router.post(
         } catch (error) {
             if (error.name === 'SequelizeValidationError') {
                 book = await Book.build(req.body);
-                res.render('new-book', {
+                res.render('book/new', {
                     article,
                     errors: error.errors,
                     title: 'New Book'
