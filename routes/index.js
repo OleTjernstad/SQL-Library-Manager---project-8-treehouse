@@ -29,7 +29,7 @@ router.get(
 );
 
 router.get('/books/new', (req, res, next) => {
-    res.render('book/new');
+    res.render('book/new', { book: {} });
 });
 
 router.post(
@@ -40,12 +40,12 @@ router.post(
             book = await Book.create(req.body);
             res.redirect('/books');
         } catch (error) {
+            console.log(error);
             if (error.name === 'SequelizeValidationError') {
                 book = await Book.build(req.body);
                 res.render('book/new', {
-                    article,
-                    errors: error.errors,
-                    title: 'New Book'
+                    book,
+                    errors: error.errors
                 });
             } else {
                 throw error;
