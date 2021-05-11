@@ -11,7 +11,7 @@ router.get('/', async (req, res, next) => {
 router.get('/books', async (req, res, next) => {
     // Shows the full list of books
     const books = await Book.findAll();
-    res.json(books);
+    res.render('index', { books });
 });
 
 router.get('/books/new', async (req, res, next) => {
