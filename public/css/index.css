@@ -109,3 +109,18 @@ input[type='text'] {
 .error {
     color: rgb(236, 15, 15);
 }
+
+.pagination-container {
+    height: 100%; /* take height of nav parent */
+    list-style-type: none;
+    padding-left: 0; /* remove default UL padding */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.pagination-container li {
+    padding: 10px;
+}
+.pagination-container .active {
+    background: #025340;
+}

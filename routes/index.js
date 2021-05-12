@@ -33,8 +33,20 @@ router.get('/', (req, res, next) => {
 router.get(
     '/books',
     asyncHandler(async (req, res, next) => {
-        const books = await Book.findAll();
-        res.render('book/index', { books });
+        const page = req.query.page ? req.query.page : 1;
+        const limit = 2;
+        const offset = (page - 1) * limit;
+
+        const { count, rows } = await Book.findAndCountAll({
+            limit: limit,
+            offset: offset
+        });
+        const totalPages = Math.ceil(count / limit);
+        res.render('book/index', {
+            books: rows,
+            totalPages,
+            currentPage: Number(page)
+        });
     })
 );
 

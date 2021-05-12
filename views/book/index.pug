@@ -22,6 +22,20 @@ block content
           td= book.author
           td= book.genre
           td= book.year
+  div
+    - var n = 0;
+    ul.pagination-container
+      if currentPage != 1
+        li
+          a.button( href=`/books?page=${currentPage-1}`) < Previous
+      while n < totalPages
+        li
+          - n++
+          a.button(class= currentPage == n ? "active" : "" href=`/books?page=${n}`)= n
+      if currentPage < totalPages
+        li
+          a.button( href=`/books?page=${currentPage + 1}`) Next >
+
 
      
 
