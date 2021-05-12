@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Sequelize = require('sequelize');
 
 const { Book } = require('../models');
 
@@ -14,6 +15,7 @@ const asyncHandler = (cb) => {
             await cb(req, res, next);
         } catch (error) {
             // Forward error to the global error handler
+            console.log(error);
             next(error);
         }
     };
@@ -32,8 +34,31 @@ router.get('/', (req, res, next) => {
 router.get(
     '/books',
     asyncHandler(async (req, res, next) => {
-        // Shows the full list of books
         const books = await Book.findAll();
+        res.render('book/index', { books });
+    })
+);
+
+/**
+ * Load book list from search
+ */
+router.post(
+    '/books',
+    asyncHandler(async (req, res, next) => {
+        const Op = Sequelize.Op;
+        const { search } = req.body;
+        console.log(req.body);
+        const books = await Book.findAll({
+            where: {
+                [Op.or]: [
+                    { title: { [Op.substring]: search } },
+                    { author: { [Op.substring]: search } },
+                    { genre: { [Op.substring]: search } },
+                    { year: { [Op.substring]: search } }
+                ]
+            }
+        });
+
         res.render('book/index', { books });
     })
 );
