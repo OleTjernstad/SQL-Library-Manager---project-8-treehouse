@@ -111,6 +111,11 @@ router.get(
     '/books/:id',
     asyncHandler(async (req, res, next) => {
         const book = await Book.findByPk(req.params.id);
+        if (book == null) {
+            const err = new Error('Not Found');
+            err.status = 404;
+            next(err);
+        }
         res.render('book/update', { book });
     })
 );
