@@ -84,13 +84,20 @@ router.post(
     })
 );
 
+router.get(
+    '/books/:id/delete',
+    asyncHandler(async (req, res) => {
+        const book = await Book.findByPk(req.params.id);
+        res.render('book/delete', { book });
+    })
+);
+
 router.post(
     '/books/:id/delete',
     asyncHandler(async (req, res, next) => {
-        // Deletes a book. Careful, this can’t be undone. It can be helpful to create a new “test” book to test deleting
-
-        const books = await Book.findAll();
-        res.json(books);
+        const books = await Book.findByPk(req.params.id);
+        await books.destroy();
+        res.redirect('/books');
     })
 );
 
