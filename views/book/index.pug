@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1 Books
     
-  form(method="post")
+  form(method="get" action="/books")
     input#search(name='search' type='text')
     button(type="submit") Search
     a.button(href='/books/new') Create New Book
@@ -27,14 +27,14 @@ block content
     ul.pagination-container
       if currentPage != 1
         li
-          a.button( href=`/books?page=${currentPage-1}`) < Previous
+          a.button( href=`/books?page=${currentPage-1}${search.length ? '&search='+search : ''}`) < Previous
       while n < totalPages
         li
           - n++
-          a.button(class= currentPage == n ? "active" : "" href=`/books?page=${n}`)= n
+          a.button(class= currentPage == n ? "active" : "" href=`/books?page=${n}${search.length ? '&search='+search : ''}`)= n
       if currentPage < totalPages
         li
-          a.button( href=`/books?page=${currentPage + 1}`) Next >
+          a.button( href=`/books?page=${currentPage + 1}${search.length ? '&search='+search : ''}`) Next >
 
 
      

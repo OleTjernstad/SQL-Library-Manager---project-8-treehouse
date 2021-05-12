@@ -20,6 +20,33 @@ const asyncHandler = (cb) => {
     };
 };
 
+const booksLoader = async (currentPage, search = '') => {
+    const limit = 2;
+    const offset = (currentPage - 1) * limit;
+    const Op = Sequelize.Op;
+
+    const { count, rows } = await Book.findAndCountAll({
+        limit: limit,
+        offset: offset,
+        where: {
+            [Op.or]: [
+                { title: { [Op.substring]: search } },
+                { author: { [Op.substring]: search } },
+                { genre: { [Op.substring]: search } },
+                { year: { [Op.substring]: search } }
+            ]
+        }
+    });
+    const totalPages = Math.ceil(count / limit);
+
+    return {
+        books: rows,
+        totalPages,
+        currentPage: Number(currentPage),
+        search: search
+    };
+};
+
 /**
  * Redirect to books route
  */
@@ -34,42 +61,8 @@ router.get(
     '/books',
     asyncHandler(async (req, res, next) => {
         const page = req.query.page ? req.query.page : 1;
-        const limit = 2;
-        const offset = (page - 1) * limit;
-
-        const { count, rows } = await Book.findAndCountAll({
-            limit: limit,
-            offset: offset
-        });
-        const totalPages = Math.ceil(count / limit);
-        res.render('book/index', {
-            books: rows,
-            totalPages,
-            currentPage: Number(page)
-        });
-    })
-);
-
-/**
- * Load book list from search
- */
-router.post(
-    '/books',
-    asyncHandler(async (req, res, next) => {
-        const Op = Sequelize.Op;
-        const { search } = req.body;
-        const books = await Book.findAll({
-            where: {
-                [Op.or]: [
-                    { title: { [Op.substring]: search } },
-                    { author: { [Op.substring]: search } },
-                    { genre: { [Op.substring]: search } },
-                    { year: { [Op.substring]: search } }
-                ]
-            }
-        });
-
-        res.render('book/index', { books });
+        const response = await booksLoader(page, req.query.search);
+        res.render('book/index', response);
     })
 );
 
