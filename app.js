@@ -29,14 +29,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/static', express.static('public'));
 
+/**
+ * Routes
+ */
 app.use('/', indexRouter);
 
+/**
+ * 404 Not Found Route
+ */
 app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
+/**
+ * Error handler
+ */
 app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.locals.error = err;

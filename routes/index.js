@@ -3,6 +3,11 @@ const router = express.Router();
 
 const { Book } = require('../models');
 
+/**
+ * AsyncHandler to add try catch to routes
+ * @param {function} cb CallBack Function to run
+ * @returns
+ */
 const asyncHandler = (cb) => {
     return async (req, res, next) => {
         try {
@@ -14,11 +19,16 @@ const asyncHandler = (cb) => {
     };
 };
 
-/* GET home page. */
+/**
+ * Redirect to books route
+ */
 router.get('/', (req, res, next) => {
     res.redirect('/books');
 });
 
+/**
+ * Load list of all books
+ */
 router.get(
     '/books',
     asyncHandler(async (req, res, next) => {
@@ -28,10 +38,16 @@ router.get(
     })
 );
 
+/**
+ * Render new book form
+ */
 router.get('/books/new', (req, res, next) => {
     res.render('book/new', { book: {} });
 });
 
+/**
+ * Handle post request from new book form
+ */
 router.post(
     '/books/new',
     asyncHandler(async (req, res, next) => {
@@ -54,6 +70,9 @@ router.post(
     })
 );
 
+/**
+ * Render update book form
+ */
 router.get(
     '/books/:id',
     asyncHandler(async (req, res, next) => {
@@ -62,6 +81,9 @@ router.get(
     })
 );
 
+/**
+ * Handle post request from update book form
+ */
 router.post(
     '/books/:id',
     asyncHandler(async (req, res, next) => {
@@ -84,6 +106,9 @@ router.post(
     })
 );
 
+/**
+ * Render confirm delete book page
+ */
 router.get(
     '/books/:id/delete',
     asyncHandler(async (req, res) => {
@@ -92,6 +117,9 @@ router.get(
     })
 );
 
+/**
+ * Handle post request for delete book
+ */
 router.post(
     '/books/:id/delete',
     asyncHandler(async (req, res, next) => {
