@@ -15,7 +15,6 @@ const asyncHandler = (cb) => {
             await cb(req, res, next);
         } catch (error) {
             // Forward error to the global error handler
-            console.log(error);
             next(error);
         }
     };
@@ -47,7 +46,6 @@ router.post(
     asyncHandler(async (req, res, next) => {
         const Op = Sequelize.Op;
         const { search } = req.body;
-        console.log(req.body);
         const books = await Book.findAll({
             where: {
                 [Op.or]: [

@@ -2,11 +2,11 @@ extends ../layout
 
 block content
   h1 Books
-  p
+    
+  form(method="post")
+    input#search(name='search' type='text')
+    button(type="submit") Search
     a.button(href='/books/new') Create New Book
-    form(method="post")
-      input#search(name='search' type='text')
-      input(type="submit", value = "Search")
   table
     thead
       tr
