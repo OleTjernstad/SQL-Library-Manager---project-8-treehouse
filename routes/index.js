@@ -20,8 +20,14 @@ const asyncHandler = (cb) => {
     };
 };
 
+/**
+ * Load books to list
+ * @param {Number} currentPage
+ * @param {String} search Search string
+ * @returns Object
+ */
 const booksLoader = async (currentPage, search = '') => {
-    const limit = 2;
+    const limit = 10;
     const offset = (currentPage - 1) * limit;
     const Op = Sequelize.Op;
 
